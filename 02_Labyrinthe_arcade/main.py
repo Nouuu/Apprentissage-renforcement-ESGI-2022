@@ -1,3 +1,5 @@
+import os
+
 import arcade
 
 from agent import Agent
@@ -14,14 +16,15 @@ if __name__ == "__main__":
     environment = Environment(MAZE)
     agent = Agent(environment)
 
-    print(agent.state)
+    if os.path.exists(FILE_QTABLE):
+        agent.load(FILE_QTABLE)
 
-    windows = MazeWindow(agent)
+    print(len(environment.states))
+
+    windows = MazeWindow(agent, True)
     windows.setup()
     arcade.run()
 
-    # for i in range(100):
-    #     steps, score = agent.play()
-    #     # environment.print(agent)
-    #     print('Steps : ', steps, 'Score : ', score)
-    # agent.play(True)
+    agent.save(FILE_QTABLE)
+
+    print(agent.score)

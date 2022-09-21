@@ -7,7 +7,7 @@ from environment import Environment
 
 class Agent:
     def __init__(self, env: Environment, alpha: float = 1, gamma: float = 0.3, exploration: float = 1,
-                 cooling_rate: float = 0.99):
+                 cooling_rate: float = 0.999):
         self.__env = env
         self.reset()
         self.__init_qtable()

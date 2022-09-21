@@ -9,6 +9,8 @@ MAZE = """
 ################*#
 """
 
+FILE_QTABLE = 'qtable.dat'
+
 ACTION_UP = 'U'
 ACTION_DOWN = 'D'
 ACTION_LEFT = 'L'
