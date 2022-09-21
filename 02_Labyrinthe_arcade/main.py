@@ -102,7 +102,7 @@ class Agent:
         self.__state = state
         return action, reward
 
-    def __reset(self):
+    def reset(self):
         self.__score = 0
         self.__state = self.__env.start_state
 
@@ -111,7 +111,7 @@ class Agent:
         return max(actions, key=actions.get)
 
     def play(self, print_maze=False):
-        self.__reset()
+        self.reset()
         steps = 0
         while agent.state != environment.goal_state:
             steps += 1

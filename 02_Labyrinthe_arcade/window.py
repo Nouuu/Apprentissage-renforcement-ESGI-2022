@@ -34,7 +34,9 @@ class MazeWindow(arcade.Window):
         self.__alien.draw()
 
     def on_update(self, delta_time):
-
-        step, score = self.__agent.step()
-        self.__alien.center_x = (self.__agent.state[1] + 0.5) * SPRITE_SIZE
-        self.__alien.center_y = (self.__agent.env.height - self.__agent.state[0] - 0.5) * SPRITE_SIZE
+        if self.__agent.state != self.__agent.env.goal_state:
+            self.__agent.step()
+            self.__alien.center_x = (self.__agent.state[1] + 0.5) * SPRITE_SIZE
+            self.__alien.center_y = (self.__agent.env.height - self.__agent.state[0] - 0.5) * SPRITE_SIZE
+        else:
+            self.__agent.reset()
