@@ -1,17 +1,24 @@
-import time
+import pickle
+from random import uniform, choice
 
 from conf import *
 from environment import Environment
 
 
 class Agent:
-    def __init__(self, env: Environment, alpha=1, gamma=0.3):
+    def __init__(self, env: Environment, alpha: float = 1, gamma: float = 0.3, exploration: float = 1,
+                 cooling_rate: float = 0.99):
         self.__env = env
-        self.__score = 0
-        self.__state = env.start_state
+        self.reset()
+        self.__init_qtable()
         self.__alpha = alpha
         self.__gamma = gamma
-        self.__init_qtable()
+        self.__exploration = exploration
+        self.__cooling_rate = cooling_rate
+
+    def reset(self):
+        self.__score = 0
+        self.__state = self.__env.start_state
 
     def __init_qtable(self):
         self.__qtable = {}
@@ -28,28 +35,31 @@ class Agent:
         self.__qtable[self.__state][action] += \
             self.__alpha * (reward + self.__gamma * max_q - self.__qtable[self.__state][action])
 
-        self.__score += reward
         self.__state = state
+        self.__score += reward
         return action, reward
 
-    def reset(self):
-        self.__score = 0
-        self.__state = self.__env.start_state
-
     def __best_action(self):
+        if uniform(0, 1) < self.__exploration:
+            self.__exploration *= self.__cooling_rate
+            return choice(ACTIONS)
+
         actions = self.__qtable[self.__state]
         return max(actions, key=actions.get)
 
-    def play(self, print_maze=False):
-        self.reset()
-        steps = 0
-        while self.state != self.__env.goal_state:
-            steps += 1
+    def learn(self, iterations: int = 1000):
+        for _ in range(iterations):
             self.step()
-            if print_maze:
-                time.sleep(0.5)
-                self.__env.print(self)
-        return steps, self.__score
+            while self.state != self.__env.goal_state:
+                self.step()
+
+    def save(self, filename: str):
+        with open(filename, 'wb') as file:
+            pickle.dump(self.__qtable, file)
+
+    def load(self, filename: str):
+        with open(filename, 'rb') as file:
+            self.__qtable = pickle.load(file)
 
     @property
     def state(self):
@@ -62,6 +72,10 @@ class Agent:
     @property
     def env(self):
         return self.__env
+
+    @property
+    def exploration(self):
+        return self.__exploration
 
     def __repr__(self) -> str:
         return str(self.__qtable)
