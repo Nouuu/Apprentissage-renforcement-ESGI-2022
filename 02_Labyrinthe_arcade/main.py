@@ -28,14 +28,14 @@ class Environment:
         self.__rows = len(str_maze.strip().splitlines())
         self.__cols = len(str_maze.strip().splitlines()[0])
 
-    def __is_forbidden_state(self, state: tuple):
+    def is_forbidden_state(self, state: tuple):
         return state not in self.__states or \
                self.__states[state] in FORBIDDEN_STATES
 
     def do(self, state: tuple, action: str):
         move = ACTIONS_MOVES[action]
         new_state = (state[0] + move[0], state[1] + move[1])
-        if self.__is_forbidden_state(new_state):
+        if self.is_forbidden_state(new_state):
             reward = self.__rewards.get[MAZE_WALL]
         else:
             state = new_state
@@ -90,7 +90,7 @@ class Agent:
             for action in ACTIONS:
                 self.__qtable[state][action] = 0
 
-    def __step(self):
+    def step(self):
         action = self.__best_action()
         reward, state = self.__env.do(self.__state, action)
 
@@ -115,7 +115,7 @@ class Agent:
         steps = 0
         while agent.state != environment.goal_state:
             steps += 1
-            self.__step()
+            self.step()
             if print_maze:
                 time.sleep(0.5)
                 self.__env.print(self)
@@ -129,6 +129,10 @@ class Agent:
     def score(self):
         return self.__score
 
+    @property
+    def env(self):
+        return self.__env
+
     def __repr__(self) -> str:
         return str(self.__qtable)
 
@@ -139,7 +143,8 @@ if __name__ == "__main__":
 
     print(agent.state)
 
-    windows = MazeWindow(environment)
+    windows = MazeWindow(agent)
+    windows.setup()
     arcade.run()
 
     # for i in range(100):
