@@ -1,6 +1,9 @@
 import time
 
+import arcade
+
 from env import *
+from window import MazeWindow
 
 
 # À expérimenter
@@ -61,6 +64,14 @@ class Environment:
     @property
     def goal_state(self):
         return self.__goal_state
+
+    @property
+    def height(self):
+        return self.__rows
+
+    @property
+    def width(self):
+        return self.__cols
 
 
 class Agent:
@@ -126,8 +137,13 @@ if __name__ == "__main__":
     environment = Environment(MAZE)
     agent = Agent(environment)
 
-    for i in range(100):
-        steps, score = agent.play()
-        # environment.print(agent)
-        print('Steps : ', steps, 'Score : ', score)
-    agent.play(True)
+    print(agent.state)
+
+    windows = MazeWindow(environment)
+    arcade.run()
+
+    # for i in range(100):
+    #     steps, score = agent.play()
+    #     # environment.print(agent)
+    #     print('Steps : ', steps, 'Score : ', score)
+    # agent.play(True)

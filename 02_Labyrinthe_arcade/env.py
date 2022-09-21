@@ -30,6 +30,8 @@ FORBIDDEN_STATES = [MAZE_WALL, MAZE_START]
 
 REWARD_DEFAULT = -1
 
+## Arcade
+SPRITE_SIZE = 20
 
 class Rewards:
     def __init__(self, maze_size: int):
