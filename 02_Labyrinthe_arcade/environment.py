@@ -1,8 +1,11 @@
+from conf import *
+
+
 class Environment:
     def __init__(self, str_maze: str):
         self.__parse(str_maze)
 
-    def __parse(self, str_maze):
+    def __parse(self, str_maze: str):
         self.__rewards = Rewards(len(str_maze.strip()))
         self.__states = {}
         for row, line in enumerate(str_maze.strip().splitlines()):
@@ -19,14 +22,24 @@ class Environment:
         return state not in self.__states or \
                self.__states[state] in FORBIDDEN_STATES
 
+    def is_wall(self, state: tuple):
+        return self.__states[state] == MAZE_WALL
+
+    def is_start(self, state: tuple):
+        return self.__states[state] == MAZE_START
+
+    def is_goal(self, state: tuple):
+        return self.__states[state] == MAZE_GOAL
+
     def do(self, state: tuple, action: str):
         move = ACTIONS_MOVES[action]
         new_state = (state[0] + move[0], state[1] + move[1])
+
         if self.is_forbidden_state(new_state):
-            reward = self.__rewards.get[MAZE_WALL]
+            reward = self.__rewards.forbidden_reward
         else:
             state = new_state
-            reward = self.__rewards.get[self.__states[new_state]]
+            reward = self.__rewards.of(self.__states[new_state])
 
         return reward, state
 
