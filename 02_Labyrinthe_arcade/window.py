@@ -1,6 +1,6 @@
 import arcade
 
-from env import *
+from conf import *
 
 
 class MazeWindow(arcade.Window):
