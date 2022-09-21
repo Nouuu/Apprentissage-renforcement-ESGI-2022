@@ -9,14 +9,17 @@ class Agent:
     def __init__(self, env: Environment, alpha: float = 1, gamma: float = 0.3, exploration: float = 1,
                  cooling_rate: float = 0.999):
         self.__env = env
-        self.reset()
+        self.reset(False)
         self.__init_qtable()
         self.__alpha = alpha
         self.__gamma = gamma
         self.__exploration = exploration
         self.__cooling_rate = cooling_rate
+        self.__history = []
 
-    def reset(self):
+    def reset(self, store_history: bool = True):
+        if store_history:
+            self.__history.append(self.__score)
         self.__score = 0
         self.__state = self.__env.start_state
 
@@ -49,7 +52,7 @@ class Agent:
 
     def learn(self, iterations: int = 1000):
         for _ in range(iterations):
-            self.step()
+            self.reset()
             while self.state != self.__env.goal_state:
                 self.step()
 
@@ -76,6 +79,10 @@ class Agent:
     @property
     def exploration(self):
         return self.__exploration
+
+    @property
+    def history(self):
+        return self.__history
 
     def __repr__(self) -> str:
         return str(self.__qtable)
