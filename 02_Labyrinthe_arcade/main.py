@@ -21,7 +21,7 @@ if __name__ == "__main__":
         gamma=0.8,
         exploration=1,
         min_exploration=0,
-        cooling_rate=0.999
+        cooling_rate=0.99
     )
 
     if os.path.exists(FILE_QTABLE):
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     print(len(environment.states))
 
-    agent.learn(20)
+    agent.learn(30)
 
     windows = MazeWindow(agent, True)
     windows.setup()
