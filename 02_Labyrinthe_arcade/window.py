@@ -43,7 +43,7 @@ class MazeWindow(arcade.Window):
 
         arcade.draw_text(
             f"Simulation {self.__iteration}, Score : {self.__agent.score}, "
-            f"e-greedy : {'{:.2f}'.format(self.__agent.exploration * 100)}%, "
+            f"E-greedy : {'{:.2f}'.format(self.__agent.exploration * 100)}%, "
             f"Auto play : {'YES' if self.__auto_play else 'NO'}",
             10, 10, arcade.color.WHITE, 14)
 
