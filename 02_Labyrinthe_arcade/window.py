@@ -17,19 +17,19 @@ class MazeWindow(arcade.Window):
         self.__sprites = arcade.SpriteList()
         for state in self.__agent.env.states:
             if self.__agent.env.is_forbidden_state(state):
-                sprite = arcade.Sprite(":resources:images/tiles/boxCrate_single.png", 0.5)
+                sprite = arcade.Sprite(":resources:images/tiles/boxCrate_single.png", 0.5 * SCALE)
                 sprite.center_x, sprite.center_y = self.state_to_xy(state)
                 self.__sprites.append(sprite)
             else:
-                sprite = arcade.Sprite(":resources:images/tiles/lava.png", 0.5)
+                sprite = arcade.Sprite(":resources:images/tiles/lava.png", 0.5 * SCALE)
                 sprite.center_x, sprite.center_y = self.state_to_xy(state)
                 self.__sprites.append(sprite)
 
-        mushroom = arcade.Sprite(":resources:images/tiles/mushroomRed.png", 0.5)
+        mushroom = arcade.Sprite(":resources:images/tiles/mushroomRed.png", 0.5 * SCALE)
         mushroom.center_x, mushroom.center_y = self.state_to_xy(self.__agent.env.goal_state)
         self.__sprites.append(mushroom)
 
-        self.__agent_sprite = arcade.Sprite(":resources:images/alien/alienBlue_walk1.png", 0.3)
+        self.__agent_sprite = arcade.Sprite(":resources:images/alien/alienBlue_walk1.png", 0.3 * SCALE)
         self.__agent_sprite.center_x, self.__agent_sprite.center_y = self.state_to_xy(self.__agent.state)
 
     def state_to_xy(self, state: tuple):
@@ -65,3 +65,5 @@ class MazeWindow(arcade.Window):
             self.new_game()
         elif key == arcade.key.H:
             self.__agent.heat()
+        elif key == arcade.key.C:
+            self.__agent.cool()

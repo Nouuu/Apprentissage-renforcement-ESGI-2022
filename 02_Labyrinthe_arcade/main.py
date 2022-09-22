@@ -17,10 +17,11 @@ if __name__ == "__main__":
     environment = Environment(MAZE)
     agent = Agent(
         environment,
-        alpha=1,
-        gamma=0.3,
-        exploration=0,
-        cooling_rate=0.99
+        alpha=0.8,
+        gamma=0.8,
+        exploration=1,
+        min_exploration=0,
+        cooling_rate=0.999
     )
 
     if os.path.exists(FILE_QTABLE):
@@ -28,7 +29,7 @@ if __name__ == "__main__":
 
     print(len(environment.states))
 
-    # agent.learn(100)
+    agent.learn(20)
 
     windows = MazeWindow(agent, True)
     windows.setup()

@@ -51,7 +51,7 @@ class Agent:
 
     def __best_action(self):
         if uniform(0, 1) < self.__exploration:
-            self.__exploration *= max(self.__cooling_rate * self.__exploration, self.__min_exploration)
+            self.__exploration = max(self.__cooling_rate * self.__exploration, self.__min_exploration)
             return choice(ACTIONS)
 
         actions = self.__qtable[self.__state]
@@ -67,14 +67,17 @@ class Agent:
 
     def save(self, filename: str):
         with open(filename, 'wb') as file:
-            pickle.dump(self.__qtable, file)
+            pickle.dump((self.__qtable, self.__history), file)
 
     def load(self, filename: str):
         with open(filename, 'rb') as file:
-            self.__qtable = pickle.load(file)
+            (self.__qtable, self.__history) = pickle.load(file)
 
     def heat(self):
         self.__exploration = 1
+
+    def cool(self):
+        self.__exploration = self.__min_exploration
 
     @property
     def state(self):
