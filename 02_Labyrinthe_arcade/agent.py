@@ -6,14 +6,21 @@ from environment import Environment
 
 
 class Agent:
-    def __init__(self, env: Environment, alpha: float = 1, gamma: float = 0.3, exploration: float = 1,
-                 cooling_rate: float = 0.999):
+    def __init__(self,
+                 env: Environment,
+                 alpha: float = 1,
+                 gamma: float = 0.3,
+                 exploration: float = 1,
+                 min_exploration: float = 0,
+                 cooling_rate: float = 0.999
+                 ):
         self.__env = env
         self.reset(False)
         self.__init_qtable()
         self.__alpha = alpha
         self.__gamma = gamma
         self.__exploration = exploration
+        self.__min_exploration = min_exploration
         self.__cooling_rate = cooling_rate
         self.__history = []
 
@@ -44,15 +51,17 @@ class Agent:
 
     def __best_action(self):
         if uniform(0, 1) < self.__exploration:
-            self.__exploration *= self.__cooling_rate
+            self.__exploration *= max(self.__cooling_rate * self.__exploration, self.__min_exploration)
             return choice(ACTIONS)
 
         actions = self.__qtable[self.__state]
         return max(actions, key=actions.get)
 
     def learn(self, iterations: int = 1000):
-        for _ in range(iterations):
-            self.reset()
+        for i in range(1, iterations + 1):
+            if i % (iterations / 10) == 0:
+                print(f'Iteration {i}, Score : {self.__score}, E-greedy : {"{:.2f}".format(self.exploration * 100)}%')
+            self.reset(store_history=False if i == 1 else True)
             while self.state != self.__env.goal_state:
                 self.step()
 
@@ -63,6 +72,9 @@ class Agent:
     def load(self, filename: str):
         with open(filename, 'rb') as file:
             self.__qtable = pickle.load(file)
+
+    def heat(self):
+        self.__exploration = 1
 
     @property
     def state(self):

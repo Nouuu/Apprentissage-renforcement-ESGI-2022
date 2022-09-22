@@ -63,3 +63,5 @@ class MazeWindow(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.R:
             self.new_game()
+        elif key == arcade.key.H:
+            self.__agent.heat()
